@@ -72,7 +72,7 @@ __nnls(const CBLAS_INT m, const CBLAS_INT n, double* restrict a, double* restric
                 tmpint = m - indz;
                 pivot2 = a[indz + j*m];
                 a[indz + j*m] = 1.0;
-                BLAS_FUNC(dlarf)("L", &tmpint, &one, &a[indz + j*m], &one, &tau, &zz[indz], &tmpint, &tmp_work);
+                BLAS_FUNC(dlarf)("L", &tmpint, &one, &a[indz + j*m], &one, &tau, &zz[indz], &tmpint, &tmp_work, 1);
                 // See if ztest is positive. This is from the original F77 code.
                 // Probably better to use a sign test instead of a division.
                 ztest = zz[indz] / pivot;
@@ -104,7 +104,7 @@ __nnls(const CBLAS_INT m, const CBLAS_INT n, double* restrict a, double* restric
             for (k = indz; k < n; k++)
             {
                 jj = indices[k];
-                BLAS_FUNC(dlarf)("L", &tmpint, &one, &a[indz - 1 + j*m], &one, &tau, &a[indz - 1 + jj*m], &tmpint, &tmp_work);
+                BLAS_FUNC(dlarf)("L", &tmpint, &one, &a[indz - 1 + j*m], &one, &tau, &a[indz - 1 + jj*m], &tmpint, &tmp_work, 1);
             }
         }
         // Restore the pivot element into a, zero the subdiagonal elements in col j

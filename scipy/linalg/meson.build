@@ -231,10 +231,19 @@ cython_blas = py3.extension_module('cython_blas',
   subdir: 'scipy/linalg'
 )
 
+# CHARACTER-valued LAPACK functions are called through a BIND(C) entry point
+# (see src/_character_functions.f90)
+if get_option('_without-fortran')
+  _character_functions = 'src/_character_functions.c'
+else
+  _character_functions = 'src/_character_functions.f90'
+endif
+
 cython_lapack = py3.extension_module('cython_lapack',
   [
     linalg_cython_gen.process(cython_linalg[1]),  # cython_lapack.pyx
     cython_linalg[5],  # _lapack_subroutines.h
+    _character_functions,
   ],
   c_args: cython_c_args,
   link_args: version_link_args,

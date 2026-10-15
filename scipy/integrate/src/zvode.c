@@ -656,7 +656,7 @@ zvsol(zvode_common_struct_t* S, ZVODE_CPLX_TYPE* restrict wm, CBLAS_INT* restric
     {
         case 1:
         case 2: {
-            BLAS_FUNC(zgetrs)("N", &(CBLAS_INT){S->n}, &int1, wm, &(CBLAS_INT){S->n}, &iwm[30], x, &(CBLAS_INT){S->n}, &ier);
+            BLAS_FUNC(zgetrs)("N", &(CBLAS_INT){S->n}, &int1, wm, &(CBLAS_INT){S->n}, &iwm[30], x, &(CBLAS_INT){S->n}, &ier, 1);
             break;
         }
         case 3: {
@@ -698,7 +698,7 @@ zvsol(zvode_common_struct_t* S, ZVODE_CPLX_TYPE* restrict wm, CBLAS_INT* restric
             CBLAS_INT ml = iwm[0];
             CBLAS_INT mu = iwm[1];
             CBLAS_INT meband = 2 * ml + mu + 1;
-            BLAS_FUNC(zgbtrs)("N", &(CBLAS_INT){S->n}, &ml, &mu, &int1, wm, &meband, &iwm[30], x, &(CBLAS_INT){S->n}, &ier);
+            BLAS_FUNC(zgbtrs)("N", &(CBLAS_INT){S->n}, &ml, &mu, &int1, wm, &meband, &iwm[30], x, &(CBLAS_INT){S->n}, &ier, 1);
             break;
         }
     }

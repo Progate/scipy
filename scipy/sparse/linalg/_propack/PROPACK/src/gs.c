@@ -146,10 +146,10 @@ void scgs(CBLAS_INT n, CBLAS_INT k, float* V, CBLAS_INT ldv, float* vnew, const 
         CBLAS_INT block_size = end - start + 1;
 
         // Compute all projection coefficients for this block: work = V_block^T * vnew
-        BLAS_FUNC(sgemv)("T", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione);
+        BLAS_FUNC(sgemv)("T", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione, 1);
 
         // Orthogonalize: vnew = vnew - V_block * work
-        BLAS_FUNC(sgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione);
+        BLAS_FUNC(sgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione, 1);
 
         idx += 2;  // Move to next block
         start = indices[idx];
@@ -177,10 +177,10 @@ void dcgs(CBLAS_INT n, CBLAS_INT k, double* V, CBLAS_INT ldv, double* vnew, cons
         CBLAS_INT block_size = end - start + 1;
 
         // Compute all projection coefficients for this block: work = V_block^T * vnew
-        BLAS_FUNC(dgemv)("T", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione);
+        BLAS_FUNC(dgemv)("T", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione, 1);
 
         // Orthogonalize: vnew = vnew - V_block * work
-        BLAS_FUNC(dgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione);
+        BLAS_FUNC(dgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione, 1);
 
         idx += 2;  // Move to next block
         start = indices[idx];
@@ -208,10 +208,10 @@ void ccgs(CBLAS_INT n, CBLAS_INT k, PROPACK_CPLXF_TYPE* V, CBLAS_INT ldv, PROPAC
         CBLAS_INT block_size = end - start + 1;
 
         // Compute all projection coefficients for this block: work = V_block^H * vnew
-        BLAS_FUNC(cgemv)("C", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione);
+        BLAS_FUNC(cgemv)("C", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione, 1);
 
         // Orthogonalize: vnew = vnew - V_block * work
-        BLAS_FUNC(cgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione);
+        BLAS_FUNC(cgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione, 1);
 
         idx += 2;  // Move to next block
         start = indices[idx];
@@ -239,10 +239,10 @@ void zcgs(CBLAS_INT n, CBLAS_INT k, PROPACK_CPLX_TYPE* V, CBLAS_INT ldv, PROPACK
         CBLAS_INT block_size = end - start + 1;
 
         // Compute all projection coefficients for this block: work = V_block^H * vnew
-        BLAS_FUNC(zgemv)("C", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione);
+        BLAS_FUNC(zgemv)("C", &n, &block_size, &one, &V[start * ldv], &ldv, vnew, &ione, &zero, work, &ione, 1);
 
         // Orthogonalize: vnew = vnew - V_block * work
-        BLAS_FUNC(zgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione);
+        BLAS_FUNC(zgemv)("N", &n, &block_size, &neg_one, &V[start * ldv], &ldv, work, &ione, &one, vnew, &ione, 1);
 
         idx += 2;  // Move to next block
         start = indices[idx];

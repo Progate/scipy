@@ -243,7 +243,7 @@ cpanel_bmod (
 		   }
 #endif
 		    ctrsv_( "L", "N", "U", &segsze, &lusup[luptr], 
-			   &nsupr, TriTmp, &incx );
+			   &nsupr, TriTmp, &incx , 1, 1, 1);
 #endif
 #else		
 		    clsolve ( nsupr, segsze, &lusup[luptr], TriTmp );
@@ -290,7 +290,7 @@ cpanel_bmod (
 			   &nsupr, TriTmp, &incx, &beta, MatvecTmp, &incy);
 #else
 		    cgemv_("N", &block_nrow, &segsze, &alpha, &lusup[luptr1], 
-			   &nsupr, TriTmp, &incx, &beta, MatvecTmp, &incy);
+			   &nsupr, TriTmp, &incx, &beta, MatvecTmp, &incy, 1);
 #endif
 #else
 		    cmatvec(nsupr, block_nrow, segsze, &lusup[luptr1],
@@ -442,7 +442,7 @@ cpanel_bmod (
 		   }
 #endif
 		    ctrsv_( "L", "N", "U", &segsze, &lusup[luptr], 
-			   &nsupr, tempv, &incx );
+			   &nsupr, tempv, &incx , 1, 1, 1);
 #endif
 		    
 		    luptr += segsze;	/* Dense matrix-vector */
@@ -454,7 +454,7 @@ cpanel_bmod (
 			   &nsupr, tempv, &incx, &beta, tempv1, &incy );
 #else
 		    cgemv_( "N", &nrow, &segsze, &alpha, &lusup[luptr], 
-			   &nsupr, tempv, &incx, &beta, tempv1, &incy );
+			   &nsupr, tempv, &incx, &beta, tempv1, &incy , 1);
 #endif
 #else
 		    clsolve ( nsupr, segsze, &lusup[luptr], tempv );

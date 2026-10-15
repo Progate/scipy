@@ -218,7 +218,7 @@ dcolumn_bmod (
 		       &nsupr, tempv, &incx );
 #else		
 		dtrsv_( "L", "N", "U", &segsze, &lusup[luptr], 
-		       &nsupr, tempv, &incx );
+		       &nsupr, tempv, &incx , 1, 1, 1);
 #endif		
  		luptr += segsze;  /* Dense matrix-vector */
 		tempv1 = &tempv[segsze];
@@ -229,7 +229,7 @@ dcolumn_bmod (
 		       &nsupr, tempv, &incx, &beta, tempv1, &incy );
 #else
 		dgemv_( "N", &nrow, &segsze, &alpha, &lusup[luptr], 
-		       &nsupr, tempv, &incx, &beta, tempv1, &incy );
+		       &nsupr, tempv, &incx, &beta, tempv1, &incy , 1);
 #endif
 #else
 		dlsolve ( nsupr, segsze, &lusup[luptr], tempv );
@@ -318,7 +318,7 @@ dcolumn_bmod (
 	       &nsupr, &lusup[ufirst], &incx );
 #else
 	dtrsv_( "L", "N", "U", &nsupc, &lusup[luptr], 
-	       &nsupr, &lusup[ufirst], &incx );
+	       &nsupr, &lusup[ufirst], &incx , 1, 1, 1);
 #endif
 	
 	alpha = none; beta = one; /* y := beta*y + alpha*A*x */
@@ -328,7 +328,7 @@ dcolumn_bmod (
 	       &lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
 #else
 	dgemv_( "N", &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr,
-	       &lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
+	       &lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy , 1);
 #endif
 #else
 	dlsolve ( nsupr, nsupc, &lusup[luptr], &lusup[ufirst] );

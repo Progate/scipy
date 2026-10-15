@@ -122,7 +122,7 @@ void sbdqr(const CBLAS_INT ignorelast, const CBLAS_INT jobq, const CBLAS_INT n, 
     {
         // Reset Qt to the identity matrix.
         CBLAS_INT nplus1 = n + 1;
-        BLAS_FUNC(slaset)("A", &nplus1, &nplus1, &flt0, &flt1, Qt, &ldq);
+        BLAS_FUNC(slaset)("A", &nplus1, &nplus1, &flt0, &flt1, Qt, &ldq, 1);
     }
     for (CBLAS_INT i = 0; i < n-1; i++)
     {
@@ -416,7 +416,7 @@ void dbdqr(const CBLAS_INT ignorelast, const CBLAS_INT jobq, const CBLAS_INT n, 
     {
         // Reset Qt to the identity matrix.
         CBLAS_INT nplus1 = n + 1;
-        BLAS_FUNC(dlaset)("A", &nplus1, &nplus1, &dbl0, &dbl1, Qt, &ldq);
+        BLAS_FUNC(dlaset)("A", &nplus1, &nplus1, &dbl0, &dbl1, Qt, &ldq, 1);
     }
     for (CBLAS_INT i = 0; i < n-1; i++)
     {

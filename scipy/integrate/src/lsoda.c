@@ -488,7 +488,7 @@ solsy(double* wm, CBLAS_INT* iwm, double* x, double* tem, lsoda_common_struct_t*
 
     if ((S->miter == 1) || (S->miter == 2))
     {
-        BLAS_FUNC(dgetrs)("N", &(CBLAS_INT){S->n}, &int1, &wm[2], &(CBLAS_INT){S->n}, &iwm[20], x, &(CBLAS_INT){S->n}, &ierr);
+        BLAS_FUNC(dgetrs)("N", &(CBLAS_INT){S->n}, &int1, &wm[2], &(CBLAS_INT){S->n}, &iwm[20], x, &(CBLAS_INT){S->n}, &ierr, 1);
         return;
     } else if (S->miter == 3) {
         double phl0 = wm[1];
@@ -518,7 +518,7 @@ solsy(double* wm, CBLAS_INT* iwm, double* x, double* tem, lsoda_common_struct_t*
         int ml = (int)iwm[0];
         int mu = (int)iwm[1];
         int meband = 2*ml + mu + 1;
-        BLAS_FUNC(dgbtrs)("N", &(CBLAS_INT){S->n}, &(CBLAS_INT){ml}, &(CBLAS_INT){mu}, &int1, &wm[2], &(CBLAS_INT){meband}, &iwm[20], x, &(CBLAS_INT){S->n}, &ierr);
+        BLAS_FUNC(dgbtrs)("N", &(CBLAS_INT){S->n}, &(CBLAS_INT){ml}, &(CBLAS_INT){mu}, &int1, &wm[2], &(CBLAS_INT){meband}, &iwm[20], x, &(CBLAS_INT){S->n}, &ierr, 1);
     }
 
     return;

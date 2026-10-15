@@ -268,13 +268,13 @@ extern void zcopy_(slu_blasint *, doublecomplex *, slu_blasint *, doublecomplex 
 extern void zaxpy_(slu_blasint *, doublecomplex *, doublecomplex *, slu_blasint *, doublecomplex *, slu_blasint *);
 extern void zgemm_(const char*, const char*, const slu_blasint*, const slu_blasint*, const slu_blasint*,
                   const doublecomplex*, const doublecomplex*, const slu_blasint*, const doublecomplex*,
-		  const slu_blasint*, const doublecomplex*, doublecomplex*, const slu_blasint*);
+		  const slu_blasint*, const doublecomplex*, doublecomplex*, const slu_blasint*, size_t, size_t);
 extern void ztrsv_(char*, char*, char*, slu_blasint*, doublecomplex*, slu_blasint*,
-                  doublecomplex*, slu_blasint*);
+                  doublecomplex*, slu_blasint*, size_t, size_t, size_t);
 extern void ztrsm_(char*, char*, char*, char*, slu_blasint*, slu_blasint*,
-                  doublecomplex*, doublecomplex*, slu_blasint*, doublecomplex*, slu_blasint*);
+                  doublecomplex*, doublecomplex*, slu_blasint*, doublecomplex*, slu_blasint*, size_t, size_t, size_t, size_t);
 extern void zgemv_(char *, slu_blasint *, slu_blasint *, doublecomplex *, doublecomplex *a, slu_blasint *,
-                  doublecomplex *, slu_blasint *, doublecomplex *, doublecomplex *, slu_blasint *);
+                  doublecomplex *, slu_blasint *, doublecomplex *, doublecomplex *, slu_blasint *, size_t);
 
 extern void zusolve(int, int, doublecomplex*, doublecomplex*);
 extern void zlsolve(int, int, doublecomplex*, doublecomplex*);

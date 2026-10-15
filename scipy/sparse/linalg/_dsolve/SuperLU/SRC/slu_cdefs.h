@@ -268,13 +268,13 @@ extern void ccopy_(slu_blasint *, singlecomplex *, slu_blasint *, singlecomplex 
 extern void caxpy_(slu_blasint *, singlecomplex *, singlecomplex *, slu_blasint *, singlecomplex *, slu_blasint *);
 extern void cgemm_(const char*, const char*, const slu_blasint*, const slu_blasint*, const slu_blasint*,
                   const singlecomplex*, const singlecomplex*, const slu_blasint*, const singlecomplex*,
-		  const slu_blasint*, const singlecomplex*, singlecomplex*, const slu_blasint*);
+		  const slu_blasint*, const singlecomplex*, singlecomplex*, const slu_blasint*, size_t, size_t);
 extern void ctrsv_(char*, char*, char*, slu_blasint*, singlecomplex*, slu_blasint*,
-                  singlecomplex*, slu_blasint*);
+                  singlecomplex*, slu_blasint*, size_t, size_t, size_t);
 extern void ctrsm_(char*, char*, char*, char*, slu_blasint*, slu_blasint*,
-                  singlecomplex*, singlecomplex*, slu_blasint*, singlecomplex*, slu_blasint*);
+                  singlecomplex*, singlecomplex*, slu_blasint*, singlecomplex*, slu_blasint*, size_t, size_t, size_t, size_t);
 extern void cgemv_(char *, slu_blasint *, slu_blasint *, singlecomplex *, singlecomplex *a, slu_blasint *,
-                  singlecomplex *, slu_blasint *, singlecomplex *, singlecomplex *, slu_blasint *);
+                  singlecomplex *, slu_blasint *, singlecomplex *, singlecomplex *, slu_blasint *, size_t);
 
 extern void cusolve(int, int, singlecomplex*, singlecomplex*);
 extern void clsolve(int, int, singlecomplex*, singlecomplex*);

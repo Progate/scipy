@@ -37,6 +37,7 @@ WRAPPED_FUNCS = ['cdotc', 'cdotu', 'zdotc', 'zdotu', 'cladiv', 'zladiv']
 USE_OLD_ACCELERATE = ['lsame', 'dcabs1']
 
 C_PREAMBLE = """
+#include <stddef.h>  /* size_t for the hidden Fortran string lengths */
 #include "numpy/npy_math.h"  /* for npy_complex{64,128} only */
 #include "scipy_blas_defines.h"
 #include "fortran_defs.h"
@@ -97,6 +98,20 @@ def read_signatures(lines):
             'argtypes': list(argtypes)
         })
     return sigs
+
+
+def hidden_strlen_args(name, argnames, argtypes):
+    """
+    Names of the arguments that Fortran passes a hidden string length for.
+
+    Fortran passes the length of every CHARACTER dummy argument as an extra
+    trailing argument (``size_t`` with gfortran >= 8 and flang). Calling the
+    routines from C without them is not conforming: it only happens to work on
+    some ABIs and breaks where caller and callee types must agree (e.g. wasm).
+    CHARACTER-valued functions (``chla_transtype``) receive the result buffer
+    differently and are not handled here.
+    """
+    return [n for n, t in zip(argnames, argtypes) if t == 'char']
 
 
 def get_blas_macro_and_name(name, accelerate, ilp64=False):

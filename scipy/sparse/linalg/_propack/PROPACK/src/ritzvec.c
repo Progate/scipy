@@ -25,7 +25,7 @@ void sritzvec(const int which, const int jobu, const int jobv, const CBLAS_INT m
     //   B = M * [R; 0]
     sbdqr((dim == (m < n ? m : n)), jobu, dim, D, E, &c1, &c2, &work[imt], dim+1);
     // Compute SVD of R using the Divide-and-conquer SVD: R = P * S * Q^T,
-    BLAS_FUNC(sbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info);
+    BLAS_FUNC(sbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info, 1, 1);
     // Compute left singular vectors for B, X = P^T * M^T
     sgemm_ovwr(1, dim, dim+1, dim, 1.0f, &work[ip], dim, 0.0f, &work[imt], dim+1, &work[iwrk], lwrk / dim);
 
@@ -68,7 +68,7 @@ void dritzvec(const int which, const int jobu, const int jobv, const CBLAS_INT m
     //   B = M * [R; 0]
     dbdqr((dim == (m < n ? m : n)), jobu, dim, D, E, &c1, &c2, &work[imt], dim+1);
     // Compute SVD of R using the Divide-and-conquer SVD: R = P * S * Q^T,
-    BLAS_FUNC(dbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info);
+    BLAS_FUNC(dbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info, 1, 1);
     // Compute left singular vectors for B, X = P^T * M^T
     dgemm_ovwr(1, dim, dim+1, dim, 1.0, &work[ip], dim, 0.0, &work[imt], dim+1, &work[iwrk], lwrk / dim);
 
@@ -113,7 +113,7 @@ void critzvec(const int which, const int jobu, const int jobv, const CBLAS_INT m
     sbdqr((dim == (m < n ? m : n)), jobu, dim, D, E, &c1, &c2, &work[imt], dim+1);
 
     // Compute SVD of R using the Divide-and-conquer SVD: R = P * S * Q^T,
-    BLAS_FUNC(sbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info);
+    BLAS_FUNC(sbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info, 1, 1);
 
     // Compute left singular vectors for B, X = P^T * M^T
     sgemm_ovwr(1, dim, dim+1, dim, 1.0f, &work[ip], dim, 0.0f, &work[imt], dim+1, &work[iwrk], lwrk / dim);
@@ -159,7 +159,7 @@ void zritzvec(const int which, const int jobu, const int jobv, const CBLAS_INT m
     //   B = M * [R; 0]
     dbdqr((dim == (m < n ? m : n)), jobu, dim, D, E, &c1, &c2, &work[imt], dim+1);
     // Compute SVD of R using the Divide-and-conquer SVD: R = P * S * Q^T,
-    BLAS_FUNC(dbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info);
+    BLAS_FUNC(dbdsdc)("U", "I", &dim, D, E, &work[ip], &dim, &work[iqt], &dim, dd, id, &work[iwrk], iwork, &info, 1, 1);
     // Compute left singular vectors for B, X = P^T * M^T
     dgemm_ovwr(1, dim, dim+1, dim, 1.0, &work[ip], dim, 0.0, &work[imt], dim+1, &work[iwrk], lwrk / dim);
 

@@ -37,6 +37,7 @@ LAPACK_DECLS = _wrappers_common.LAPACK_DECLS
 NPY_TYPES = _wrappers_common.NPY_TYPES
 WRAPPED_FUNCS = _wrappers_common.WRAPPED_FUNCS
 get_blas_macro_and_name = _wrappers_common.get_blas_macro_and_name
+hidden_strlen_args = _wrappers_common.hidden_strlen_args
 read_signatures = _wrappers_common.read_signatures
 write_files = _wrappers_common.write_files
 
@@ -537,11 +538,21 @@ def generate_decl_pyx(name, return_type, argnames, argtypes, accelerate,
     # Use '&' to get pointer of "return" variable for complex-valued functions
     if name in WRAPPED_FUNCS:
         pyx_call_args[0] = ''.join([arg_casts(c_argtypes[0]), '&', argnames[0]])
+    # Fortran passes the length of each CHARACTER argument as a trailing hidden
+    # argument; every character argument of the wrapped routines has length 1
+    hidden_lengths = hidden_strlen_args(name, argnames, argtypes)
+    c_proto += ''.join(f', size_t {n}_len' for n in hidden_lengths)
+    pyx_call_args += ['1'] * len(hidden_lengths)
     pyx_call_args = ', '.join(pyx_call_args)
     blas_macro, blas_name = get_blas_macro_and_name(name, accelerate, ilp64)
+    symbol = f'{blas_macro}({blas_name})'
+    if return_type == 'char':
+        # CHARACTER-valued functions go through a BIND(C) entry point
+        # (see src/_character_functions.f90)
+        symbol = f'scipy_{name}'
     return f"""
 cdef extern from "{header_name}":
-    {blas_return_type} _fortran_{name} "{blas_macro}({blas_name})"({c_proto}) nogil
+    {blas_return_type} _fortran_{name} "{symbol}"({c_proto}) nogil
 cdef {return_type} {name}({pyx_input_args}) noexcept nogil:
     {init_return_var}
     {return_kw}_fortran_{name}({pyx_call_args})
@@ -692,6 +703,12 @@ def generate_decl_c(name, return_type, argnames, argtypes, accelerate,
         c_return_type = 'void'
     blas_macro, blas_name = get_blas_macro_and_name(name, accelerate, ilp64)
     c_args = ', '.join(f'{t} *{n}' for t, n in zip(c_argtypes, argnames))
+    c_args += ''.join(f', size_t {n}_len'
+                      for n in hidden_strlen_args(name, argnames, argtypes))
+    if return_type == 'char':
+        # CHARACTER-valued functions go through a BIND(C) entry point
+        # (see src/_character_functions.f90)
+        return f"{c_return_type} scipy_{name}({c_args});\n"
     return f"{c_return_type} {blas_macro}({blas_name})({c_args});\n"
 
 

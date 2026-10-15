@@ -265,13 +265,13 @@ extern void dcopy_(slu_blasint *, double *, slu_blasint *, double *, slu_blasint
 extern void daxpy_(slu_blasint *, double *, double *, slu_blasint *, double *, slu_blasint *);
 extern void dgemm_(const char*, const char*, const slu_blasint*, const slu_blasint*, const slu_blasint*,
                   const double*, const double*, const slu_blasint*, const double*,
-		  const slu_blasint*, const double*, double*, const slu_blasint*);
+		  const slu_blasint*, const double*, double*, const slu_blasint*, size_t, size_t);
 extern void dtrsv_(char*, char*, char*, slu_blasint*, double*, slu_blasint*,
-                  double*, slu_blasint*);
+                  double*, slu_blasint*, size_t, size_t, size_t);
 extern void dtrsm_(char*, char*, char*, char*, slu_blasint*, slu_blasint*,
-                  double*, double*, slu_blasint*, double*, slu_blasint*);
+                  double*, double*, slu_blasint*, double*, slu_blasint*, size_t, size_t, size_t, size_t);
 extern void dgemv_(char *, slu_blasint *, slu_blasint *, double *, double *a, slu_blasint *,
-                  double *, slu_blasint *, double *, double *, slu_blasint *);
+                  double *, slu_blasint *, double *, double *, slu_blasint *, size_t);
 
 extern void dusolve(int, int, double*, double*);
 extern void dlsolve(int, int, double*, double*);

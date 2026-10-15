@@ -192,11 +192,11 @@ sgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 			&beta, &work[0], &n );
 #else
 		strsm_("L", "L", "N", "U", &nsupc, &nrhs, &alpha,
-		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb);
+		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb, 1, 1, 1, 1);
 		
 		sgemm_( "N", "N", &nrow, &nrhs, &nsupc, &alpha, 
 			&Lval[luptr+nsupc], &nsupr, &Bmat[fsupc], &ldb, 
-			&beta, &work[0], &n );
+			&beta, &work[0], &n , 1, 1);
 #endif
 		for (j = 0; j < nrhs; j++) {
 		    rhs_work = &Bmat[(size_t)j * (size_t)ldb];
@@ -261,7 +261,7 @@ sgstrs (trans_t trans, SuperMatrix *L, SuperMatrix *U,
 		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb);
 #else
 		strsm_("L", "U", "N", "N", &nsupc, &nrhs, &alpha,
-		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb);
+		       &Lval[luptr], &nsupr, &Bmat[fsupc], &ldb, 1, 1, 1, 1);
 #endif
 #else		
 		for (j = 0; j < nrhs; j++)

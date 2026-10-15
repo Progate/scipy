@@ -594,7 +594,7 @@ dvsol(vode_common_struct_t* S, double* restrict wm, CBLAS_INT* restrict iwm, dou
     {
         case 1:
         case 2: {
-            BLAS_FUNC(dgetrs)("N", &(CBLAS_INT){S->n}, &int1, &wm[2], &(CBLAS_INT){S->n}, &iwm[30], x, &(CBLAS_INT){S->n}, &ier);
+            BLAS_FUNC(dgetrs)("N", &(CBLAS_INT){S->n}, &int1, &wm[2], &(CBLAS_INT){S->n}, &iwm[30], x, &(CBLAS_INT){S->n}, &ier, 1);
             break;
         }
         case 3: {
@@ -622,7 +622,7 @@ dvsol(vode_common_struct_t* S, double* restrict wm, CBLAS_INT* restrict iwm, dou
             CBLAS_INT ml = iwm[0];
             CBLAS_INT mu = iwm[1];
             CBLAS_INT meband = 2 * ml + mu + 1;
-            BLAS_FUNC(dgbtrs)("N", &(CBLAS_INT){S->n}, &ml, &mu, &int1, &wm[2], &meband, &iwm[30], x, &(CBLAS_INT){S->n}, &ier);
+            BLAS_FUNC(dgbtrs)("N", &(CBLAS_INT){S->n}, &ml, &mu, &int1, &wm[2], &meband, &iwm[30], x, &(CBLAS_INT){S->n}, &ier, 1);
             break;
         }
     }

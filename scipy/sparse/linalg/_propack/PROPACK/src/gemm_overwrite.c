@@ -23,7 +23,7 @@ void sgemm_ovwr(const int transa, CBLAS_INT m, CBLAS_INT n, CBLAS_INT k, float a
         CBLAS_INT block_start = i * blocksize;
 
         // Compute work = alpha * op(A) * B(:, block_start:block_start+blocksize-1)
-        BLAS_FUNC(sgemm)(&transchara, "N", &m, &blocksize, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m);
+        BLAS_FUNC(sgemm)(&transchara, "N", &m, &blocksize, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m, 1, 1);
 
         // Copy result back to B
         float* B_col = &B[block_start * ldb];
@@ -51,7 +51,7 @@ void sgemm_ovwr(const int transa, CBLAS_INT m, CBLAS_INT n, CBLAS_INT k, float a
     if (remainder_cols > 0) {
         CBLAS_INT block_start = num_full_blocks * blocksize;
 
-        BLAS_FUNC(sgemm)(&transchara, "N", &m, &remainder_cols, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m);
+        BLAS_FUNC(sgemm)(&transchara, "N", &m, &remainder_cols, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m, 1, 1);
 
         // Copy remainder results back
         float* B_col = &B[block_start * ldb];
@@ -97,7 +97,7 @@ void sgemm_ovwr_left(const CBLAS_INT transb, CBLAS_INT m, CBLAS_INT n, CBLAS_INT
         CBLAS_INT block_start = i * blocksize;
 
         // Compute work = alpha * A(block_start:block_start+blocksize-1, :) * op(B)
-        BLAS_FUNC(sgemm)("N", &transcharb, &blocksize, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &blocksize);
+        BLAS_FUNC(sgemm)("N", &transcharb, &blocksize, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &blocksize, 1, 1);
 
         // Copy result back to A
         float* work_ptr = work;
@@ -116,7 +116,7 @@ void sgemm_ovwr_left(const CBLAS_INT transb, CBLAS_INT m, CBLAS_INT n, CBLAS_INT
     if (remainder_rows > 0) {
         CBLAS_INT block_start = num_full_blocks * blocksize;
 
-        BLAS_FUNC(sgemm)("N", &transcharb, &remainder_rows, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &remainder_rows);
+        BLAS_FUNC(sgemm)("N", &transcharb, &remainder_rows, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &remainder_rows, 1, 1);
 
         // Copy remainder results back
         float* work_ptr = work;
@@ -154,7 +154,7 @@ void dgemm_ovwr(
         CBLAS_INT block_start = i * blocksize;
 
         // Compute work = alpha * op(A) * B(:, block_start:block_start+blocksize-1)
-        BLAS_FUNC(dgemm)(&transchara, "N", &m, &blocksize, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m);
+        BLAS_FUNC(dgemm)(&transchara, "N", &m, &blocksize, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m, 1, 1);
 
         // Copy result back to B
         double* B_col = &B[block_start * ldb];
@@ -182,7 +182,7 @@ void dgemm_ovwr(
     if (remainder_cols > 0) {
         CBLAS_INT block_start = num_full_blocks * blocksize;
 
-        BLAS_FUNC(dgemm)(&transchara, "N", &m, &remainder_cols, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m);
+        BLAS_FUNC(dgemm)(&transchara, "N", &m, &remainder_cols, &k, &alpha, A, &lda, &B[block_start * ldb], &ldb, &zero, work, &m, 1, 1);
 
         // Copy remainder results back
         double* B_col = &B[block_start * ldb];
@@ -228,7 +228,7 @@ void dgemm_ovwr_left(const CBLAS_INT transb, CBLAS_INT m, CBLAS_INT n, CBLAS_INT
         CBLAS_INT block_start = i * blocksize;
 
         // Compute work = alpha * A(block_start:block_start+blocksize-1, :) * op(B)
-        BLAS_FUNC(dgemm)("N", &transcharb, &blocksize, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &blocksize);
+        BLAS_FUNC(dgemm)("N", &transcharb, &blocksize, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &blocksize, 1, 1);
 
         // Copy result back to A
         double* work_ptr = work;
@@ -246,7 +246,7 @@ void dgemm_ovwr_left(const CBLAS_INT transb, CBLAS_INT m, CBLAS_INT n, CBLAS_INT
     if (remainder_rows > 0) {
         CBLAS_INT block_start = num_full_blocks * blocksize;
 
-        BLAS_FUNC(dgemm)("N", &transcharb, &remainder_rows, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &remainder_rows);
+        BLAS_FUNC(dgemm)("N", &transcharb, &remainder_rows, &n, &k, &alpha, &A[block_start], &lda, B, &ldb, &zero, work, &remainder_rows, 1, 1);
 
         // Copy remainder results back
         double* work_ptr = work;

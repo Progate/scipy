@@ -265,13 +265,13 @@ extern void scopy_(slu_blasint *, float *, slu_blasint *, float *, slu_blasint *
 extern void saxpy_(slu_blasint *, float *, float *, slu_blasint *, float *, slu_blasint *);
 extern void sgemm_(const char*, const char*, const slu_blasint*, const slu_blasint*, const slu_blasint*,
                   const float*, const float*, const slu_blasint*, const float*,
-		  const slu_blasint*, const float*, float*, const slu_blasint*);
+		  const slu_blasint*, const float*, float*, const slu_blasint*, size_t, size_t);
 extern void strsv_(char*, char*, char*, slu_blasint*, float*, slu_blasint*,
-                  float*, slu_blasint*);
+                  float*, slu_blasint*, size_t, size_t, size_t);
 extern void strsm_(char*, char*, char*, char*, slu_blasint*, slu_blasint*,
-                  float*, float*, slu_blasint*, float*, slu_blasint*);
+                  float*, float*, slu_blasint*, float*, slu_blasint*, size_t, size_t, size_t, size_t);
 extern void sgemv_(char *, slu_blasint *, slu_blasint *, float *, float *a, slu_blasint *,
-                  float *, slu_blasint *, float *, float *, slu_blasint *);
+                  float *, slu_blasint *, float *, float *, slu_blasint *, size_t);
 
 extern void susolve(int, int, float*, float*);
 extern void slsolve(int, int, float*, float*);

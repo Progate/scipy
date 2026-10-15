@@ -112,9 +112,9 @@ zsnode_bmod (
        }
 #endif
 	ztrsv_( "L", "N", "U", &nsupc, &lusup[luptr], &nsupr, 
-	      &lusup[ufirst], &incx );
+	      &lusup[ufirst], &incx , 1, 1, 1);
 	zgemv_( "N", &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr, 
-		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
+		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy , 1);
 #endif
 #else
 	zlsolve ( nsupr, nsupc, &lusup[luptr], &lusup[ufirst] );

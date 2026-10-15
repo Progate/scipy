@@ -194,7 +194,7 @@ ARNAUD_zneupd(struct ARNAUD_state_d *V, ARNAUD_INT rvec, ARNAUD_INT howmny, ARNA
 
         tmp_int = ldh*V->ncv;
         ARNAUD_BLAS(zcopy)(&tmp_int, &workl[ih], &int1, &workl[iuptri], &int1);
-        ARNAUD_BLAS(zlaset)("A", &V->ncv, &V->ncv, &cdbl0, &cdbl1, &workl[invsub], &ldq);
+        ARNAUD_BLAS(zlaset)("A", &V->ncv, &V->ncv, &cdbl0, &cdbl1, &workl[invsub], &ldq, 1);
         ARNAUD_BLAS(zlahqr)(&int1, &int1, &V->ncv, &int1, &V->ncv, &workl[iuptri], &ldh,
                 &workl[iheig], &int1, &V->ncv, &workl[invsub], &ldq, &ierr);
         ARNAUD_BLAS(zcopy)(&V->ncv, &workl[invsub + V->ncv - 1], &ldq, &workl[ihbds], &int1);
@@ -211,7 +211,7 @@ ARNAUD_zneupd(struct ARNAUD_state_d *V, ARNAUD_INT rvec, ARNAUD_INT howmny, ARNA
             //  Reorder the computed upper triangular matrix.
 
             ARNAUD_BLAS(ztrsen)("N", "V", select, &V->ncv, &workl[iuptri], &ldh, &workl[invsub], &ldq,
-                    &workl[iheig], &nconv2, &conds, &sep, workev, &V->ncv, &ierr);
+                    &workl[iheig], &nconv2, &conds, &sep, workev, &V->ncv, &ierr, 1, 1);
 
             if (nconv2 < V->nconv) { V->nconv = nconv2; }
             if (ierr == 1) {
@@ -251,8 +251,8 @@ ARNAUD_zneupd(struct ARNAUD_state_d *V, ARNAUD_INT rvec, ARNAUD_INT howmny, ARNA
         //  associated with the upper triangular matrix of order
         //  NCONV in workl(iuptri).
 
-        ARNAUD_BLAS(zunm2r)("R", "N", &V->n, &V->ncv, &V->nconv, &workl[invsub], &ldq, workev, v, &ldv, &workd[V->n], &ierr);
-        ARNAUD_BLAS(zlacpy)("A", &V->n, &V->nconv, v, &ldv, z, &ldz);
+        ARNAUD_BLAS(zunm2r)("R", "N", &V->n, &V->ncv, &V->nconv, &workl[invsub], &ldq, workev, v, &ldv, &workd[V->n], &ierr, 1, 1);
+        ARNAUD_BLAS(zlacpy)("A", &V->n, &V->nconv, v, &ldv, z, &ldz, 1);
 
         for (ARNAUD_INT j = 0; j < V->nconv; j++)
         {
@@ -290,7 +290,7 @@ ARNAUD_zneupd(struct ARNAUD_state_d *V, ARNAUD_INT rvec, ARNAUD_INT howmny, ARNA
             // 30
 
             ARNAUD_BLAS(ztrevc)("R", "S", select, &V->ncv, &workl[iuptri], &ldq, vl, &int1,
-                    &workl[invsub], &ldq, &V->ncv, &outncv, workev, rwork, &ierr);
+                    &workl[invsub], &ldq, &V->ncv, &outncv, workev, rwork, &ierr, 1, 1);
             if (ierr != 0)
             {
                 V->info = -9;
@@ -325,7 +325,7 @@ ARNAUD_zneupd(struct ARNAUD_state_d *V, ARNAUD_INT rvec, ARNAUD_INT howmny, ARNA
 
             //  The eigenvector mactirx Q of T is triangular. Form Z*Q
 
-            ARNAUD_BLAS(ztrmm)("R", "U", "N", "N", &V->n, &V->nconv, &cdbl1, &workl[invsub], &ldq, z, &ldz);
+            ARNAUD_BLAS(ztrmm)("R", "U", "N", "N", &V->n, &V->nconv, &cdbl1, &workl[invsub], &ldq, z, &ldz, 1, 1, 1, 1);
 
         }
 
@@ -1048,8 +1048,8 @@ LINE40:
         ARNAUD_BLAS(zdscal)(&n, &temp1, &v[ldv*V->aitr_j], &int1);
         ARNAUD_BLAS(zdscal)(&n, &temp1, &workd[ipj], &int1);
     } else {
-        ARNAUD_BLAS(zlascl)("G", &i, &i, rnorm, &dbl1, &n, &int1, &v[ldv*V->aitr_j], &n, &infol);
-        ARNAUD_BLAS(zlascl)("G", &i, &i, rnorm, &dbl1, &n, &int1, &workd[ipj], &n, &infol);
+        ARNAUD_BLAS(zlascl)("G", &i, &i, rnorm, &dbl1, &n, &int1, &v[ldv*V->aitr_j], &n, &infol, 1);
+        ARNAUD_BLAS(zlascl)("G", &i, &i, rnorm, &dbl1, &n, &int1, &workd[ipj], &n, &infol, 1);
     }
 
     //  STEP 3:  r_{j} = OP*v_{j}; Note that p_{j} = B*v_{j}
@@ -1122,12 +1122,12 @@ LINE60:
     //  Compute the j Fourier coefficients w_{j}
     //  WORKD(IPJ:IPJ+N-1) contains B*OP*v_{j}.
     tmp_int = V->aitr_j + 1;
-    ARNAUD_BLAS(zgemv)("C", &n, &tmp_int, &cdbl1, v, &ldv, &workd[ipj], &int1, &cdbl0, &h[ldh*(V->aitr_j)], &int1);
+    ARNAUD_BLAS(zgemv)("C", &n, &tmp_int, &cdbl1, v, &ldv, &workd[ipj], &int1, &cdbl0, &h[ldh*(V->aitr_j)], &int1, 1);
 
     //  Orthogonalize r_{j} against V_{j}.
     //  RESID contains OP*v_{j}. See STEP 3.
 
-    ARNAUD_BLAS(zgemv)("N", &n, &tmp_int, &cdblm1, v, &ldv, &h[ldh*(V->aitr_j)], &int1, &cdbl1, resid, &int1);
+    ARNAUD_BLAS(zgemv)("N", &n, &tmp_int, &cdblm1, v, &ldv, &h[ldh*(V->aitr_j)], &int1, &cdbl1, resid, &int1, 1);
 
     if (V->aitr_j > 0) { h[V->aitr_j + ldh*(V->aitr_j-1)] = ARNAUD_cplx(V->aitr_betaj, 0.0); }
 
@@ -1191,14 +1191,14 @@ LINE80:
     //  Compute V_{j}^T * B * r_{j}.
     //  WORKD(IRJ:IRJ+J-1) = v(:,1:J)'*WORKD(IPJ:IPJ+N-1).
     tmp_int = V->aitr_j + 1;
-    ARNAUD_BLAS(zgemv)("C", &n, &tmp_int, &cdbl1, v, &ldv, &workd[ipj], &int1, &cdbl0, &workd[irj], &int1);
+    ARNAUD_BLAS(zgemv)("C", &n, &tmp_int, &cdbl1, v, &ldv, &workd[ipj], &int1, &cdbl0, &workd[irj], &int1, 1);
 
     //  Compute the correction to the residual:
     //  r_{j} = r_{j} - V_{j} * WORKD(IRJ:IRJ+J-1).
     //  The correction to H is v(:,1:J)*H(1:J,1:J)
     //  + v(:,1:J)*WORKD(IRJ:IRJ+J-1)*e'_j.
 
-    ARNAUD_BLAS(zgemv)("N", &n, &tmp_int, &cdblm1, v, &ldv, &workd[irj], &int1, &cdbl1, resid, &int1);
+    ARNAUD_BLAS(zgemv)("N", &n, &tmp_int, &cdblm1, v, &ldv, &workd[irj], &int1, &cdbl1, resid, &int1, 1);
     ARNAUD_BLAS(zaxpy)(&tmp_int, &cdbl1, &workd[irj], &int1, &h[ldh*(V->aitr_j)], &int1);
 
     V->aitr_orth2 = 1;
@@ -1289,7 +1289,7 @@ LINE100:
                 tmp_int = k + np;
                 // zlanhs(norm, n, a, lda, work) with "work" being double type
                 // Recasting complex workspace to double for scratch space.
-                tst1 = ARNAUD_BLAS(zlanhs)("1", &tmp_int, h, &ldh, (double*)&workd[n]);
+                tst1 = ARNAUD_BLAS(zlanhs)("1", &tmp_int, h, &ldh, (double*)&workd[n], 1);
             }
             if (cabs(h[i+1 + ldh*i]) <= fmax(ulp*tst1, smlnum))
             {
@@ -1323,7 +1323,7 @@ znapps(ARNAUD_INT n, ARNAUD_INT* kev, ARNAUD_INT np, ARNAUD_CPLX_TYPE* shift, AR
 
     //  Initialize Q to the identity to accumulate
     //  the rotations and reflections
-    ARNAUD_BLAS(zlaset)("G", &kplusp, &kplusp, &cdbl0, &cdbl1, q, &ldq);
+    ARNAUD_BLAS(zlaset)("G", &kplusp, &kplusp, &cdbl0, &cdbl1, q, &ldq, 1);
 
     //  Quick return if there are no shifts to apply
 
@@ -1347,7 +1347,7 @@ znapps(ARNAUD_INT n, ARNAUD_INT* kev, ARNAUD_INT np, ARNAUD_CPLX_TYPE* shift, AR
                 if (tst1 == 0.0)
                 {
                     tmp_int = kplusp - jj;
-                    ARNAUD_BLAS(zlanhs)("1", &tmp_int, h, &ldh, (double*)workl);
+                    ARNAUD_BLAS(zlanhs)("1", &tmp_int, h, &ldh, (double*)workl, 1);
                 }
                 if (fabs(creal(h[iend+1 + ldh*iend])) <= fmax(ulp*tst1, smlnum))
                 {
@@ -1448,7 +1448,7 @@ znapps(ARNAUD_INT n, ARNAUD_INT* kev, ARNAUD_INT np, ARNAUD_CPLX_TYPE* shift, AR
                fabs(cimag(h[i + ldh*i])) + fabs(cimag(h[i+1 + ldh*(i+1)]));
         if (tst1 == 0.0)
         {
-            tst1 = ARNAUD_BLAS(zlanhs)("1", kev, h, &ldh, (double*)workl);
+            tst1 = ARNAUD_BLAS(zlanhs)("1", kev, h, &ldh, (double*)workl, 1);
         }
         if (creal(h[i+1 + ldh*i]) <= fmax(ulp*tst1, smlnum))
         {
@@ -1465,7 +1465,7 @@ znapps(ARNAUD_INT n, ARNAUD_INT* kev, ARNAUD_INT np, ARNAUD_CPLX_TYPE* shift, AR
 
     if (creal(h[*kev + ldh*(*kev-1)]) > 0.0)
     {
-        ARNAUD_BLAS(zgemv)("N", &n, &kplusp, &cdbl1, v, &ldv, &q[(*kev)*ldq], &int1, &cdbl0, &workd[n], &int1);
+        ARNAUD_BLAS(zgemv)("N", &n, &kplusp, &cdbl1, v, &ldv, &q[(*kev)*ldq], &int1, &cdbl0, &workd[n], &int1, 1);
     }
 
     //  Compute column 1 to kev of (V*Q) in backward order
@@ -1474,13 +1474,13 @@ znapps(ARNAUD_INT n, ARNAUD_INT* kev, ARNAUD_INT np, ARNAUD_CPLX_TYPE* shift, AR
     for (i = 0; i < *kev; i++)
     {
         tmp_int = kplusp - i;
-        ARNAUD_BLAS(zgemv)("N", &n, &tmp_int, &cdbl1, v, &ldv, &q[(*kev-i-1)*ldq], &int1, &cdbl0, workd, &int1);
+        ARNAUD_BLAS(zgemv)("N", &n, &tmp_int, &cdbl1, v, &ldv, &q[(*kev-i-1)*ldq], &int1, &cdbl0, workd, &int1, 1);
         ARNAUD_BLAS(zcopy)(&n, workd, &int1, &v[(kplusp-i-1)*ldv], &int1);
     }
 
     //   Move v(:,kplusp-kev+1:kplusp) into v(:,1:kev).
 
-    ARNAUD_BLAS(zlacpy)("A", &n, kev, &v[ldv*(kplusp - *kev)], &ldv, v, &ldv);
+    ARNAUD_BLAS(zlacpy)("A", &n, kev, &v[ldv*(kplusp - *kev)], &ldv, v, &ldv, 1);
 
     //  Copy the (kev+1)-st column of (V*Q) in the appropriate place
 
@@ -1523,8 +1523,8 @@ zneigh(double* rnorm, ARNAUD_INT n, ARNAUD_CPLX_TYPE* h, ARNAUD_INT ldh, ARNAUD_
     //     zlahqr returns the full Schur form of H
     //     in WORKL(1:N**2), and the Schur vectors in q.
 
-    ARNAUD_BLAS(zlacpy)("A", &n, &n, h, &ldh, workl, &n);
-    ARNAUD_BLAS(zlaset)("A", &n, &n, &c0, &c1, q, &ldq);
+    ARNAUD_BLAS(zlacpy)("A", &n, &n, h, &ldh, workl, &n, 1);
+    ARNAUD_BLAS(zlaset)("A", &n, &n, &c0, &c1, q, &ldq, 1);
     ARNAUD_BLAS(zlahqr)(&int1, &int1, &n, &int1, &n, workl, &ldh, ritz, &int1, &n, q, &ldq, ierr);
 
     if (*ierr != 0) { return; }
@@ -1535,7 +1535,7 @@ zneigh(double* rnorm, ARNAUD_INT n, ARNAUD_CPLX_TYPE* h, ARNAUD_INT ldh, ARNAUD_
     //     apply the Schur vectors to get the corresponding
     //     eigenvectors.
 
-    ARNAUD_BLAS(ztrevc)("R", "B", select, &n, workl, &n, vl, &n, q, &ldq, &n, &n, &workl[n*n], rwork, ierr);
+    ARNAUD_BLAS(ztrevc)("R", "B", select, &n, workl, &n, vl, &n, q, &ldq, &n, &n, &workl[n*n], rwork, ierr, 1, 1);
 
     if (*ierr != 0) { return; }
 
@@ -1696,8 +1696,8 @@ LINE20:
 
 LINE30:
 
-    ARNAUD_BLAS(zgemv)("C", &n, &j, &c1, v, &ldv, workd, &int1, &c0, &workd[n], &int1);
-    ARNAUD_BLAS(zgemv)("N", &n, &j, &cm1, v, &ldv, &workd[n], &int1, &c1, resid, &int1);
+    ARNAUD_BLAS(zgemv)("C", &n, &j, &c1, v, &ldv, workd, &int1, &c0, &workd[n], &int1, 1);
+    ARNAUD_BLAS(zgemv)("N", &n, &j, &cm1, v, &ldv, &workd[n], &int1, &c1, resid, &int1, 1);
 
     //  Compute the B-norm of the orthogonalized starting vector
 

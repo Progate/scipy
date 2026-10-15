@@ -165,10 +165,10 @@ sp_ctrsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 		       	&nsupr, &x[fsupc], &incx, &beta, &work[0], &incy);
 #else
 		    ctrsv_("L", "N", "U", &nsupc, &Lval[luptr], &nsupr,
-		       	&x[fsupc], &incx);
+		       	&x[fsupc], &incx, 1, 1, 1);
 		
 		    cgemv_("N", &nrow, &nsupc, &alpha, &Lval[luptr+nsupc], 
-		       	&nsupr, &x[fsupc], &incx, &beta, &work[0], &incy);
+		       	&nsupr, &x[fsupc], &incx, &beta, &work[0], &incy, 1);
 #endif
 #else
 		    clsolve ( nsupr, nsupc, &Lval[luptr], &x[fsupc]);
@@ -215,7 +215,7 @@ sp_ctrsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 		       &x[fsupc], &incx);
 #else
 		    ctrsv_("U", "N", "N", &nsupc, &Lval[luptr], &nsupr,
-                           &x[fsupc], &incx);
+                           &x[fsupc], &incx, 1, 1, 1);
 #endif
 #else		
 		    cusolve ( nsupr, nsupc, &Lval[luptr], &x[fsupc] );
@@ -270,7 +270,7 @@ sp_ctrsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 			&x[fsupc], &incx);
 #else
 		    ctrsv_("L", "T", "U", &nsupc, &Lval[luptr], &nsupr,
-			&x[fsupc], &incx);
+			&x[fsupc], &incx, 1, 1, 1);
 #endif
 		}
 	    }
@@ -307,7 +307,7 @@ sp_ctrsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 			    &x[fsupc], &incx);
 #else
 		    ctrsv_("U", "T", "N", &nsupc, &Lval[luptr], &nsupr,
-			    &x[fsupc], &incx);
+			    &x[fsupc], &incx, 1, 1, 1);
 #endif
 		}
 	    } /* for k ... */
@@ -349,7 +349,7 @@ sp_ctrsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 			&x[fsupc], &incx);
 #else
                     ctrsv_("L", trans, "U", &nsupc, &Lval[luptr], &nsupr,
-                           &x[fsupc], &incx);
+                           &x[fsupc], &incx, 1, 1, 1);
 #endif
 		}
 	    }
@@ -388,7 +388,7 @@ sp_ctrsv(char *uplo, char *trans, char *diag, SuperMatrix *L,
 			    &x[fsupc], &incx);
 #else
                     ctrsv_("U", trans, "N", &nsupc, &Lval[luptr], &nsupr,
-                               &x[fsupc], &incx);
+                               &x[fsupc], &incx, 1, 1, 1);
 #endif
   		}
   	    } /* for k ... */

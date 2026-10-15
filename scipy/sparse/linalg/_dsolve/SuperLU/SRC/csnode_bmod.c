@@ -112,9 +112,9 @@ csnode_bmod (
        }
 #endif
 	ctrsv_( "L", "N", "U", &nsupc, &lusup[luptr], &nsupr, 
-	      &lusup[ufirst], &incx );
+	      &lusup[ufirst], &incx , 1, 1, 1);
 	cgemv_( "N", &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr, 
-		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
+		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy , 1);
 #endif
 #else
 	clsolve ( nsupr, nsupc, &lusup[luptr], &lusup[ufirst] );

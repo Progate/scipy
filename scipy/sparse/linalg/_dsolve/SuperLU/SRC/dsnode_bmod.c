@@ -111,9 +111,9 @@ dsnode_bmod (
        }
 #endif
 	dtrsv_( "L", "N", "U", &nsupc, &lusup[luptr], &nsupr, 
-	      &lusup[ufirst], &incx );
+	      &lusup[ufirst], &incx , 1, 1, 1);
 	dgemv_( "N", &nrow, &nsupc, &alpha, &lusup[luptr+nsupc], &nsupr, 
-		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy );
+		&lusup[ufirst], &incx, &beta, &lusup[ufirst+nsupc], &incy , 1);
 #endif
 #else
 	dlsolve ( nsupr, nsupc, &lusup[luptr], &lusup[ufirst] );

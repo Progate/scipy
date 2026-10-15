@@ -27,7 +27,7 @@ static void ssafescal(CBLAS_INT n, float alpha, float* x)
     } else {
         // Use LAPACK's safe scaling for very small alpha values
         float one = 1.0f;
-        BLAS_FUNC(slascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info);
+        BLAS_FUNC(slascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info, 1);
     }
 }
 
@@ -52,7 +52,7 @@ void dsafescal(CBLAS_INT n, double alpha, double* x)
     } else {
         // Use LAPACK's safe scaling for very small alpha values
         double one = 1.0;
-        BLAS_FUNC(dlascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info);
+        BLAS_FUNC(dlascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info, 1);
     }
 }
 
@@ -77,7 +77,7 @@ void csafescal(CBLAS_INT n, float alpha, PROPACK_CPLXF_TYPE* x)
     } else {
         // Use LAPACK's safe scaling for very small alpha values
         float one = 1.0f;
-        BLAS_FUNC(clascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info);
+        BLAS_FUNC(clascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info, 1);
     }
 }
 
@@ -102,7 +102,7 @@ void zsafescal(CBLAS_INT n, double alpha, PROPACK_CPLX_TYPE* x)
     } else {
         // Use LAPACK's safe scaling for very small alpha values
         double one = 1.0;
-        BLAS_FUNC(zlascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info);
+        BLAS_FUNC(zlascl)("G", &ione, &ione, &alpha, &one, &n, &ione, x, &n, &info, 1);
     }
 }
 

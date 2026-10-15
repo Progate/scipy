@@ -81,7 +81,7 @@ void slansvd(int jobu, int jobv, CBLAS_INT m, CBLAS_INT n, CBLAS_INT k, CBLAS_IN
         sbdqr((j == int_min(m, n)), 0, j, &work[ib1], &work[ib1 + lanmax], &work[ibnd + j - 1], &work[ibnd + j], &work[ip], lanmax + 1);
 
         // SVD of bidiagonal matrix
-        BLAS_FUNC(sbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo);
+        BLAS_FUNC(sbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo, 1);
 
         // Update anorm estimate
         if (j > 5)
@@ -224,7 +224,7 @@ void dlansvd(int jobu, int jobv, CBLAS_INT m, CBLAS_INT n, CBLAS_INT k, CBLAS_IN
         dbdqr((j == int_min(m, n)), 0, j, &work[ib1], &work[ib1 + lanmax], &work[ibnd + j - 1], &work[ibnd + j], &work[ip], lanmax + 1);
 
         // SVD of bidiagonal matrix
-        BLAS_FUNC(dbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo);
+        BLAS_FUNC(dbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo, 1);
 
         // Update anorm estimate
         if (j > 5)
@@ -370,7 +370,7 @@ void clansvd(int jobu, int jobv, CBLAS_INT m, CBLAS_INT n, CBLAS_INT k, CBLAS_IN
         sbdqr((j == int_min(m, n)), 0, j, &work[ib1], &work[ib1 + lanmax], &work[ibnd + j - 1], &work[ibnd + j], &work[ip], lanmax + 1);
 
         // SVD of bidiagonal matrix
-        BLAS_FUNC(sbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo);
+        BLAS_FUNC(sbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo, 1);
 
         // Update anorm estimate
         if (j > 5)
@@ -516,7 +516,7 @@ void zlansvd(int jobu, int jobv, CBLAS_INT m, CBLAS_INT n, CBLAS_INT k, CBLAS_IN
         dbdqr((j == int_min(m, n)), 0, j, &work[ib1], &work[ib1 + lanmax], &work[ibnd + j - 1], &work[ibnd + j], &work[ip], lanmax + 1);
 
         // SVD of bidiagonal matrix
-        BLAS_FUNC(dbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo);
+        BLAS_FUNC(dbdsqr)("U", &j, &int0, &int1, &int0, &work[ib1], &work[ib1 + lanmax], work, &int1, &work[ibnd], &int1, work, &int1, &work[iwrk], &lapinfo, 1);
 
         // Update anorm estimate
         if (j > 5)
