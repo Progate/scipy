@@ -70,8 +70,8 @@ subroutine <prefix2c>pttrs(lower, n, nrhs, d, e, b, ldb, info)
     ! matrix whose subdiagonal is specified in the vector E, and X and B
     ! are N by NRHS matrices.
 
-    callstatement (*f2py_func)((lower?"L":"U"), &n, &nrhs, d, e, b, &ldb, &info)
-    callprotoargument char*, F_INT*, F_INT*, <ctype2>*, <ctype2c>*, <ctype2c>*, F_INT*, F_INT*
+    callstatement (*f2py_func)((lower?"L":"U"), &n, &nrhs, d, e, b, &ldb, &info, 1)
+    callprotoargument char*, F_INT*, F_INT*, <ctype2>*, <ctype2c>*, <ctype2c>*, F_INT*, F_INT*,size_t
 
     integer optional, intent(in), check(lower==0||lower==1) :: lower = 0
     integer intent(hide), depend(d) :: n = len(d)
@@ -102,8 +102,8 @@ subroutine <prefix>pteqr(compute_z, n, d, e, z, ldz, work, info)
     ! tridiagonal form, however, may preclude the possibility of obtaining
     ! high relative accuracy in the small eigenvalues of the original
     ! matrix, if these eigenvalues range over many orders of magnitude.)
-    callstatement (*f2py_func)((compute_z?(compute_z==2?"I":"V"):"N"), &n, d, e, z, &ldz, work, &info)
-    callprotoargument char*, F_INT*, <ctypereal>*, <ctypereal>*, <ctype>*, F_INT*, <ctypereal>*, F_INT*
+    callstatement (*f2py_func)((compute_z?(compute_z==2?"I":"V"):"N"), &n, d, e, z, &ldz, work, &info, 1)
+    callprotoargument char*, F_INT*, <ctypereal>*, <ctypereal>*, <ctype>*, F_INT*, <ctypereal>*, F_INT*,size_t
     integer intent(in, optional), check((compute_z>=0) && (compute_z<=2)) :: compute_z = 0
     integer intent(hide), depend(d) :: n = len(d)
     <ftypereal> intent(in,out,copy), dimension(n) :: d
@@ -124,8 +124,8 @@ subroutine <prefix2>ptsvx(fact, n, nrhs, d, e, df, ef, b, ldb, x, ldx, rcond, fe
     !
     ! Error bounds on the solution and a condition estimate are also
     ! provided.
-    callstatement (*f2py_func)(fact, &n, &nrhs, d, e, df, ef, b, &ldb, x, &ldx, &rcond, ferr, berr, work, &info)
-    callprotoargument char*, F_INT*, F_INT*, <ctype2>*, <ctype2>*, <ctype2>*, <ctype2>*, <ctype2>*, F_INT*, <ctype2>*, F_INT*,  <ctype2>*, <ctype2>*, <ctype2>*, <ctype2>*, F_INT*
+    callstatement (*f2py_func)(fact, &n, &nrhs, d, e, df, ef, b, &ldb, x, &ldx, &rcond, ferr, berr, work, &info, 1)
+    callprotoargument char*, F_INT*, F_INT*, <ctype2>*, <ctype2>*, <ctype2>*, <ctype2>*, <ctype2>*, F_INT*, <ctype2>*, F_INT*,  <ctype2>*, <ctype2>*, <ctype2>*, <ctype2>*, F_INT*,size_t
 
     character optional, intent(in) :: fact = 'N'
     integer intent(hide), depend(d) :: n = len(d)
@@ -155,8 +155,8 @@ subroutine <prefix2c>ptsvx(fact, n, nrhs, d, e, df, ef, b, ldb, x, ldx, rcond, f
     !
     ! Error bounds on the solution and a condition estimate are also
     ! provided.
-    callstatement (*f2py_func)(fact, &n, &nrhs, d, e, df, ef, b, &ldb, x, &ldx, &rcond, ferr, berr, work, rwork, &info)
-    callprotoargument char*, F_INT*, F_INT*, <ctype2>*, <ctype2c>*, <ctype2>*, <ctype2c>*, <ctype2c>*, F_INT*, <ctype2c>*, F_INT*,  <ctype2>*, <ctype2>*, <ctype2>*, <ctype2c>*, <ctype2>*, F_INT*
+    callstatement (*f2py_func)(fact, &n, &nrhs, d, e, df, ef, b, &ldb, x, &ldx, &rcond, ferr, berr, work, rwork, &info, 1)
+    callprotoargument char*, F_INT*, F_INT*, <ctype2>*, <ctype2c>*, <ctype2>*, <ctype2c>*, <ctype2c>*, F_INT*, <ctype2c>*, F_INT*,  <ctype2>*, <ctype2>*, <ctype2>*, <ctype2c>*, <ctype2>*, F_INT*,size_t
 
     character optional, intent(in) :: fact = 'N'
     integer intent(hide), depend(d) :: n = len(d)

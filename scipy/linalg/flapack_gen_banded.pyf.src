@@ -58,8 +58,8 @@ subroutine <prefix>gbtrs(ab,kl,ku,b,ipiv,trans,n,nrhs,ldab,ldb,info) ! in :Band:
     !  1  = 'T':  A'* X = B  (Transpose)
     !  2  = 'C':  A'* X = B  (Conjugate transpose = Transpose)
     
-    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)((trans>0?(trans==1?"T":"C"):"N"),&n,&kl,&ku,&nrhs,ab,&ldab,ipiv,b,&ldb,&info);for(i=0;i\<n;--ipiv[i++]);}
-    callprotoargument char*,F_INT*,F_INT *,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*
+    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)((trans>0?(trans==1?"T":"C"):"N"),&n,&kl,&ku,&nrhs,ab,&ldab,ipiv,b,&ldb,&info, 1);for(i=0;i\<n;--ipiv[i++]);}
+    callprotoargument char*,F_INT*,F_INT *,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*,<ctype>*,F_INT*,F_INT*,size_t
     !character optional:: trans='N'
     integer optional:: trans=0
     integer optional,depend(ab) :: n=shape(ab,1)
@@ -87,8 +87,8 @@ subroutine <prefix2>gbcon(norm,n,kl,ku,ab,ldab,ipiv,anorm,rcond,work,iwork,info)
     ! condition number is computed as
     ! RCOND = 1 / ( norm(A) * norm(inv(A)) ).
     threadsafe
-    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)(norm,&n,&kl,&ku,ab,&ldab,ipiv,&anorm,&rcond,work,iwork,&info);for(i=0;i\<n;--ipiv[i++]);}
-    callprotoargument char*, F_INT*, F_INT*, F_INT*, <ctype2>*, F_INT*, F_INT*, <ctype2>*, <ctype2>*, <ctype2>*, F_INT*, F_INT*
+    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)(norm,&n,&kl,&ku,ab,&ldab,ipiv,&anorm,&rcond,work,iwork,&info, 1);for(i=0;i\<n;--ipiv[i++]);}
+    callprotoargument char*, F_INT*, F_INT*, F_INT*, <ctype2>*, F_INT*, F_INT*, <ctype2>*, <ctype2>*, <ctype2>*, F_INT*, F_INT*,size_t
 
     character optional, intent(in) :: norm = '1'
     integer depend(ab),intent(hide) :: n=shape(ab,1)
@@ -113,8 +113,8 @@ subroutine <prefix2c>gbcon(norm,n,kl,ku,ab,ldab,ipiv,anorm,rcond,work,rwork,info
     ! condition number is computed as
     ! RCOND = 1 / ( norm(A) * norm(inv(A)) ).
     threadsafe
-    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)(norm,&n,&kl,&ku,ab,&ldab,ipiv,&anorm,&rcond,work,rwork,&info);for(i=0;i\<n;--ipiv[i++]);}
-    callprotoargument char*, F_INT*, F_INT*, F_INT*, <ctype2c>*, F_INT*, F_INT*, <ctype2>*, <ctype2>*, <ctype2c>*, <ctype2>*, F_INT*
+    callstatement {F_INT i;for(i=0;i\<n;++ipiv[i++]);(*f2py_func)(norm,&n,&kl,&ku,ab,&ldab,ipiv,&anorm,&rcond,work,rwork,&info, 1);for(i=0;i\<n;--ipiv[i++]);}
+    callprotoargument char*, F_INT*, F_INT*, F_INT*, <ctype2c>*, F_INT*, F_INT*, <ctype2>*, <ctype2>*, <ctype2c>*, <ctype2>*, F_INT*,size_t
 
     character optional, intent(in) :: norm = '1'
     integer depend(ab),intent(hide) :: n=shape(ab,1)
@@ -150,8 +150,8 @@ function <prefix>langb(norm,n,kl,ku,ab,ldab,work) result(n2)
     ! squares).  Note that  max(abs(A(i,j)))  is not a consistent matrix norm.
     threadsafe
     <ftypereal> <prefix>langb, n2
-    callstatement <prefix>langb_return_value = (*f2py_func)(norm, &n, &kl, &ku, ab, &ldab, work)
-    callprotoargument char*, F_INT*, F_INT*, F_INT*, <ctype>*, F_INT*, <ctypereal>*
+    callstatement <prefix>langb_return_value = (*f2py_func)(norm, &n, &kl, &ku, ab, &ldab, work, 1)
+    callprotoargument char*, F_INT*, F_INT*, F_INT*, <ctype>*, F_INT*, <ctypereal>*,size_t
     intent(c) <prefix>langb
     fortranname F_FUNC(<prefix>langb,<S,C,D,Z>LANGB)
 
