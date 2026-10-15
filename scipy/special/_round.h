@@ -64,17 +64,19 @@ double add_round_down(double a, double b)
 
 
 /* Helper code for testing _round.h. */
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) || defined(__cplusplus)
+/* WASI's fenv.h cannot change the rounding direction and has no FE_UPWARD or
+ * FE_DOWNWARD, so use the fallbacks below there. */
+#if (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L) || defined(__cplusplus)) && !defined(__wasi__)
 /* We have C99, or C++11 or higher; both have fenv.h */
 #include <fenv.h>
 #else
 
-int fesetround(int round)
+static int fesetround(int round)
 {
     return -1;
 }
 
-int fegetround()
+static int fegetround(void)
 {
     return -1;
 }
