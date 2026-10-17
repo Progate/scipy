@@ -1,6 +1,7 @@
 #ifndef BLASLAPACK_DECLARATIONS_H
 #define BLASLAPACK_DECLARATIONS_H
 
+#include <stddef.h>
 #include "../include/propack/types.h"
 
 
