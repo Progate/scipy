@@ -1,6 +1,7 @@
 #ifndef BLASLAPACK_DECLARATIONS_H
 #define BLASLAPACK_DECLARATIONS_H
 
+#include <stddef.h>
 #include "scipy_complex_support.h"
 #include "scipy_blas_defines.h"
 
